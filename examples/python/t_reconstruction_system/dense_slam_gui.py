@@ -21,6 +21,7 @@ import os, sys
 import numpy as np
 import threading
 import time
+import glob
 from common import load_rgbd_file_names, save_poses, load_intrinsic, extract_trianglemesh, get_default_dataset, extract_rgbd_frames
 
 
@@ -320,12 +321,24 @@ class ReconstructionWindow:
 
     # Major loop
     def update_main(self):
-        depth_file_names, color_file_names = load_rgbd_file_names(self.config)
+        data_path = os.path.join(os.path.expanduser('~'),'catkin_ws/src/realsense2_description/data_slam_test/')
+        n_imgs = 100
+        depth_file_names = []
+        color_file_names = []
+        for i in range(n_imgs):
+            depth_file = "frame-" + '{0:06d}'.format(i) + ".depth.png"
+            color_file = "frame-" + '{0:06d}'.format(i) + ".color.jpg"
+
+            depth_file_path = os.path.join(os.path.expanduser('~'),data_path, depth_file)
+            color_file_path = os.path.join(os.path.expanduser('~'),data_path, color_file)
+
+            depth_file_names.append(depth_file_path)
+            color_file_names.append(color_file_path)
+        # depth_file_names, color_file_names = load_rgbd_file_names(self.config)
         intrinsic = load_intrinsic(self.config)
 
         n_files = len(color_file_names)
         device = o3d.core.Device(config.device)
-
         T_frame_to_model = o3c.Tensor(np.identity(4))
         depth_ref = o3d.t.io.read_image(depth_file_names[0])
         color_ref = o3d.t.io.read_image(color_file_names[0])
