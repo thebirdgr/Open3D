@@ -3,9 +3,9 @@ fragment_size: 100
 device: CUDA:0
 engine: tensor
 multiprocessing: false
-path_dataset: ''
-depth_folder: depth
-color_folder: color
+path_dataset: '~/catkin_ws/src/realsense2_description/data_slam_test'
+depth_folder: ''
+color_folder: ''
 path_intrinsic: ''
 path_color_intrinsic: ''
 fragment_size: 100
